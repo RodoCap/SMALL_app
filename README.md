@@ -1,10 +1,10 @@
-# 📦 SMALL_app
+# 愛 SMALL_app
 
 API de inventario y ventas para mi negocio de accesorios tecnológicos (cables, audífonos, adaptadores y power banks).
 
 Empezó como un Excel y terminó siendo una app propia: registra productos, descuenta stock en cada venta y calcula cuánto he invertido y cuánto he ganado.
 
-## ✨ Qué hace
+## 經過 Qué hace
 
 - Registra productos con costo de compra, precio de venta y cantidad
 - Calcula el **stock actual** automáticamente
@@ -12,11 +12,11 @@ Empezó como un Excel y terminó siendo una app propia: registra productos, desc
 - Muestra un resumen: **total invertido, total vendido y ganancia**
 - Guarda todo en SQLite, así los datos no se pierden al cerrar el servidor
 
-## 🛠️ Hecho con
+## 使用 Hecho con
 
 Python · Flask · SQLite · Programación Orientada a Objetos
 S
-## 🧩 Cómo está organizado
+## 這 Cómo está organizado
 
 ```
 app.py        → rutas de la API (recibe y responde peticiones)
@@ -26,7 +26,7 @@ database.py   → todo lo que habla con SQLite
 
 Cada archivo hace una sola cosa: las rutas no tienen SQL y las clases no saben nada de HTTP.
 
-## 🔌 Endpoints
+## 工程 Endpoints
 
 | Método | Ruta | Qué hace |
 |---|---|---|
@@ -45,7 +45,7 @@ POST /ventas
 
 Si no hay suficiente stock, la API responde con un error `400` y un mensaje claro.
 
-## 🚀 Cómo correrlo
+##  Cómo correrlo
 
 ```bash
 git clone https://github.com/RodoCap/SMALL_app.git

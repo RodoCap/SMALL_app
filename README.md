@@ -4,7 +4,7 @@ API de inventario y ventas para mi negocio de accesorios tecnológicos (cables, 
 
 Empezó como un Excel y terminó siendo una app propia: registra productos, descuenta stock en cada venta y calcula cuánto he invertido y cuánto he ganado.
 
-##  - Qué hace
+##  Qué hace
 
 - Registra productos con costo de compra, precio de venta y cantidad
 - Calcula el **stock actual** automáticamente

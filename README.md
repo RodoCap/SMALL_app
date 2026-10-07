@@ -16,7 +16,7 @@ Empezó como un Excel y terminó siendo una app propia: registra productos, desc
 
 Python · Flask · SQLite · Programación Orientada a Objetos
 S
-## 這 Cómo está organizado
+##  Cómo está organizado
 
 ```
 app.py        → rutas de la API (recibe y responde peticiones)

@@ -45,7 +45,7 @@ POST /ventas
 
 Si no hay suficiente stock, la API responde con un error `400` y un mensaje claro.
 
-##  Cómo correrlo
+## 這 Cómo correrlo
 
 ```bash
 git clone https://github.com/RodoCap/SMALL_app.git

@@ -22,7 +22,7 @@ API REST para gestionar el inventario y ventas de un negocio de accesorios tecno
 | POST | /ventas | Registra una venta (descuenta stock) |
 | GET | /resumen | Totales: invertido, vendido, ganancia |
 
-## Cómo correrlo
+## Cómo correrlo 
 
 \`\`\`
 python -m venv venv

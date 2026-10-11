@@ -1,5 +1,5 @@
 import sqlite3
-from models import Producto,Venta
+from models import Producto, Venta
 
 
 def conectar():
@@ -24,7 +24,7 @@ def crear_tabla():
     conexion.commit()
     conexion.close()
 
-def crear_tabla_ventas(): 
+def crear_tabla_ventas():
     conexion = conectar()
     cursor = conexion.cursor()
     cursor.execute("""
@@ -34,7 +34,7 @@ def crear_tabla_ventas():
             producto TEXT NOT NULL,
             cantidad_vendida INTEGER NOT NULL,
             precio_unitario REAL NOT NULL,
-            costo_unitario REAL NOT NULL 
+            costo_unitario REAL NOT NULL
         )
     """)
     conexion.commit()
@@ -50,17 +50,15 @@ def insertar_producto(producto):
     conexion.commit()
     conexion.close()
 
-
-
-def insertar_venta(venta): 
+def insertar_venta(venta):
     conexion = conectar()
     cursor = conexion.cursor()
     cursor.execute("""
         INSERT INTO ventas (fecha, producto, cantidad_vendida, precio_unitario, costo_unitario)
         VALUES (?, ?, ?, ?, ?)
-    """, (venta.fecha, venta.producto, venta.cantidad_vendida, venta.precio_unitario, venta.costo_unitario))    
+    """, (venta.fecha, venta.producto, venta.cantidad_vendida, venta.precio_unitario, venta.costo_unitario))
     conexion.commit()
-    conexion.close()    
+    conexion.close()
 
 def obtener_productos():
     conexion = conectar()
@@ -83,7 +81,7 @@ def obtener_productos():
         productos.append(p)
     return productos
 
-def obtener_ventas(): 
+def obtener_ventas():
     conexion = conectar()
     cursor = conexion.cursor()
     cursor.execute("SELECT * FROM ventas")
@@ -91,13 +89,13 @@ def obtener_ventas():
     conexion.close()
 
     ventas = []
-    for fila in filas: 
+    for fila in filas:
         v = Venta(
-            fecha = fila["fecha"],
-            producto = fila["producto"],
-            cantidad_vendida = fila["cantidad_vendida"],
-            precio_unitario = fila["precio_unitario"],
-            costo_unitario = fila["costo_unitario"]
+            fecha=fila["fecha"],
+            producto=fila["producto"],
+            cantidad_vendida=fila["cantidad_vendida"],
+            precio_unitario=fila["precio_unitario"],
+            costo_unitario=fila["costo_unitario"]
         )
         ventas.append(v)
     return ventas
@@ -115,5 +113,18 @@ def actualizar_producto(producto):
     cursor.execute("""
         UPDATE productos SET cantidad_vendida = ? WHERE id_producto = ?
     """, (producto.cantidad_vendida, producto.id_producto))
+    conexion.commit()
+    conexion.close()
+
+def guardar_producto(producto):
+    # Guarda TODOS los datos editables del producto (para editar y reponer)
+    conexion = conectar()
+    cursor = conexion.cursor()
+    cursor.execute("""
+        UPDATE productos
+        SET nombre = ?, categoria = ?, compra = ?, venta = ?, cantidad_comprada = ?
+        WHERE id_producto = ?
+    """, (producto.nombre, producto.categoria, producto.compra, producto.venta,
+          producto.cantidad_comprada, producto.id_producto))
     conexion.commit()
     conexion.close()

@@ -7,11 +7,11 @@ Proyecto integrador de Python: **Flask + SQLite + programación orientada a obje
 ## Capturas
 
 <p align="center">
-  <img src="docs/a.png" width="180">
-  <img src="docs/b.png" width="180">
-  <img src="docs/c.png" width="180">
-  <img src="docs/d.png" width="180">
-  <img src="docs/e.png" width="180">
+  <img src="docs/a.png" width="150">
+  <img src="docs/b.png" width="150">
+  <img src="docs/c.png" width="150">
+  <img src="docs/d.png" width="150">
+  <img src="docs/e.png" width="150">
 </p>
 ## Qué hace
 

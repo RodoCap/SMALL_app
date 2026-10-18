@@ -7,12 +7,14 @@ Proyecto integrador de Python: **Flask + SQLite + programación orientada a obje
 ## Capturas
 
 <p align="center">
-  <img src="docs/a.png" width="150">
-  <img src="docs/b.png" width="150">
-  <img src="docs/c.png" width="150">
-  <img src="docs/d.png" width="150">
-  <img src="docs/e.png" width="150">
+  <img src="docs/a.png" width="140">
+  <img src="docs/b.png" width="140">
+  <img src="docs/c.png" width="140">
+  <img src="docs/d.png" width="140">
+  <img src="docs/e.png" width="140">
 </p>
+</p>
+
 ## Qué hace
 
 - **Vender:** registra una venta eligiendo producto y cantidad. El total se puede cambiar para vender a un precio distinto al de lista, y la ganancia se recalcula al instante.

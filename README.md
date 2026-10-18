@@ -4,9 +4,15 @@ Aplicación web para controlar el inventario, las ventas, los créditos y las ga
 
 Proyecto integrador de Python: **Flask + SQLite + programación orientada a objetos**.
 
-<!-- Agrega aquí 4 capturas (Vender, Inventario, Créditos, Resumen), por ejemplo en la carpeta docs/:
-![Vender](docs/vender.png) -->
+## Capturas
 
+<p align="center">
+  <img src="docs/a.png" width="180">
+  <img src="docs/b.png" width="180">
+  <img src="docs/c.png" width="180">
+  <img src="docs/d.png" width="180">
+  <img src="docs/e.png" width="180">
+</p>
 ## Qué hace
 
 - **Vender:** registra una venta eligiendo producto y cantidad. El total se puede cambiar para vender a un precio distinto al de lista, y la ganancia se recalcula al instante.

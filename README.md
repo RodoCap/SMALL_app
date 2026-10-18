@@ -1,4 +1,4 @@
-# SmallPhone · Sistema de inventario
+# 愛 SMALL_app · Sistema de inventario
 
 Aplicación web para controlar el inventario, las ventas, los créditos y las ganancias de un negocio de accesorios tecnológicos (cables, audífonos, adaptadores, power banks). Está pensada para usarse desde el celular, en el mostrador, con una interfaz simple. Se usa con clientes reales.
 
@@ -15,7 +15,7 @@ Proyecto integrador de Python: **Flask + SQLite + programación orientada a obje
 </p>
 </p>
 
-## Qué hace
+## 經 Qué hace
 
 - **Vender:** registra una venta eligiendo producto y cantidad. El total se puede cambiar para vender a un precio distinto al de lista, y la ganancia se recalcula al instante.
 - **Inventario:** tarjetas con foto y nombre; al tocar una se ve el detalle (costo, precio, unidades compradas y vendidas, totales, ganancia y precio promedio vendido). Permite crear, editar, reponer stock, corregir unidades y eliminar. Un botón con forma de ojo oculta los precios con asteriscos para enseñar la app sin mostrar los números.
@@ -40,7 +40,7 @@ Proyecto integrador de Python: **Flask + SQLite + programación orientada a obje
 
 Python 3 · Flask · SQLite (`sqlite3`) · openpyxl · HTML, CSS y JavaScript sin frameworks.
 
-## Estructura
+## 經 Estructura
 
 ```
 SMALL_app/
@@ -71,7 +71,7 @@ Al arrancar muestra dos direcciones: una para el PC (`http://127.0.0.1:5000`) y 
 
 La app corre en PythonAnywhere (plan gratuito) para usarla desde el celular sin tener el PC encendido. Allí se definen dos variables de entorno en el archivo WSGI: `SMALL_PASSWORD` (la clave de entrada) y `SECRET_KEY` (para firmar la sesión). Nunca se suben a Git.
 
-## API
+## 這 API
 
 | Método | Ruta | Qué hace |
 |---|---|---|

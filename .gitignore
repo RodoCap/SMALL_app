@@ -2,3 +2,8 @@ venv/
 __pycache__/
 inventario.db
 static/fotos/
+respaldos/
+*.bak
+quitar_rodo.py
+README_nuevo.md
+aplicar_cambio*.py

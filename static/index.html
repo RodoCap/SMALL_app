@@ -25,6 +25,8 @@
     --warn-soft: #FBEBC8;
     --danger: #A12A20;
     --danger-soft: #F9DEDA;
+    --ok: #2E7D4F;          /* verde de "paz y salvo" */
+    --ok-soft: #DDF0E3;     /* fondo suave del verde */
   }
  
   * { box-sizing: border-box; }
@@ -57,11 +59,12 @@
  
   .tabs {
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 5;
-    display: grid; grid-template-columns: repeat(3, 1fr);
+    display: grid; grid-template-columns: repeat(4, 1fr);
     background: var(--card); border-top: 1px solid var(--line);
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
   .tabs button {
+    position: relative;
     background: none; border: 0; color: var(--muted);
     padding: 10px 4px 8px; font: inherit; font-size: .8rem; font-weight: 600;
     display: flex; flex-direction: column; align-items: center; gap: 3px;
@@ -69,12 +72,21 @@
   }
   .tabs svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
   .tabs button[aria-current="page"] { color: var(--accent-text); }
+  /* Globito rojo con el número de clientes que deben */
+  .punto {
+    position: absolute; top: 6px; left: calc(50% + 6px);
+    min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px;
+    display: grid; place-items: center;
+    background: var(--accent); color: var(--on-accent); font-size: .7rem; font-weight: 700; line-height: 1;
+  }
  
   /* ---------- Elementos comunes ---------- */
   .muted { color: var(--muted); }
+  .rojo { color: var(--danger); }
   .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
   .stack { display: grid; gap: 12px; }
   h2 { font-size: 1.05rem; margin: 22px 0 10px; }
+  .sub-titulo { font-size: .95rem; margin: 4px 0 0; }
  
   label { display: grid; gap: 6px; font-weight: 600; font-size: .92rem; }
   input, select {
@@ -100,6 +112,7 @@
   .badge { font-size: .85rem; font-weight: 650; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent-text); white-space: nowrap; }
   .badge.low { background: var(--warn-soft); color: var(--warn-text); }
   .badge.out { background: var(--danger-soft); color: var(--danger); }
+  .badge.ok { background: var(--ok-soft); color: var(--ok); }
  
   /* Foto del producto (imagen real o recuadro vacío con un ícono) */
   .foto {
@@ -134,15 +147,45 @@
   .dato span { font-size: .78rem; color: var(--muted); line-height: 1.2; }
   .dato strong { font-size: .98rem; }
   .dato .good { color: var(--accent-text); }
+  .dato .rojo { color: var(--danger); }
+  .dato .verde { color: var(--ok); }
+  .dato.ancho { grid-column: span 2; }
   .acciones3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .acciones2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+
+  /* Ojito para ocultar los precios */
+  .head-right { display: flex; align-items: center; gap: 8px; }
+  .ojo {
+    display: grid; place-items: center; width: 40px; height: 40px; padding: 0;
+    background: var(--paper); border: 1px solid var(--line); border-radius: 10px;
+    color: var(--ink); cursor: pointer;
+  }
+  .ojo svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
  
+  /* ---------- Resumen: periodos ---------- */
+  .chips { display: flex; gap: 8px; margin-bottom: 12px; overflow-x: auto; }
+  .chip {
+    font: inherit; font-size: .9rem; font-weight: 650; white-space: nowrap; cursor: pointer;
+    min-height: 40px; padding: 0 14px; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--card); color: var(--ink);
+  }
+  .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+
   /* ---------- Vender ---------- */
   .qty { display: grid; grid-template-columns: 52px 1fr 52px; gap: 8px; }
   .qty input { text-align: center; font-weight: 650; font-size: 1.15rem; }
   .qty button { font-size: 1.4rem; padding: 0; }
   .total { text-align: center; padding: 8px 0 2px; }
   .total .label { color: var(--muted); font-size: .9rem; }
-  .total .big { font-size: 2.8rem; font-weight: 750; line-height: 1.1; letter-spacing: -.02em; }
+  .total .monto { display: flex; align-items: center; justify-content: center; gap: 4px; }
+  .total .monto span { font-size: 2.8rem; font-weight: 750; line-height: 1.1; letter-spacing: -.02em; }
+  .total .monto input {
+    width: 10ch; max-width: 75%; min-height: 0; padding: 0 6px;
+    font-size: 2.8rem; font-weight: 750; line-height: 1.1; letter-spacing: -.02em; text-align: center;
+    background: transparent; border: 0; border-radius: 10px;
+  }
+  .total .monto input:focus-visible { outline: none; background: var(--paper); }
+  .total .unidad { color: var(--muted); font-size: .85rem; min-height: 1.2em; }
   .total .gain { color: var(--accent-text); font-weight: 650; }
  
   /* ---------- Resumen ---------- */
@@ -155,6 +198,30 @@
   .sale { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
   .sale:last-child { border-bottom: 0; }
   .sale div:last-child { text-align: right; }
+  .anular {
+    background: none; border: 0; padding: 8px 0; min-height: 40px; cursor: pointer;
+    font: inherit; font-size: .85rem; font-weight: 650; color: var(--danger); text-decoration: underline;
+  }
+
+  /* ---------- Créditos ---------- */
+  .lista-cred { display: grid; gap: 10px; }
+  .cred {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    width: 100%; padding: 14px 16px; text-align: left; font: inherit; color: inherit;
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px; cursor: pointer;
+  }
+  .cred > div:first-child { min-width: 0; overflow-wrap: anywhere; }
+  .cred .estado { text-align: right; flex-shrink: 0; }
+  .cred .deuda { color: var(--danger); font-weight: 700; }
+  .cred .ok { color: var(--ok); font-weight: 650; font-size: .9rem; }
+  .cred.pagado { border-color: var(--ok); }
+  .fila-prod {
+    display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: end;
+    padding-bottom: 12px; border-bottom: 1px solid var(--line);
+  }
+  .fila-prod select { grid-column: 1 / -1; }
+  .mini span { font-size: .8rem; font-weight: 500; color: var(--muted); }
+  .form-error { margin: 0; color: var(--danger); font-weight: 600; font-size: .9rem; }
  
   /* ---------- Ventanas y avisos ---------- */
   dialog { border: 0; border-radius: 16px; padding: 0; width: min(92vw, 420px); max-height: 92dvh; background: var(--card); color: var(--ink); }
@@ -193,10 +260,26 @@
     </div>
     <div id="listaProductos" class="grid"></div>
   </section>
+
+  <!-- ===== CRÉDITOS ===== -->
+  <section id="vista-creditos" hidden>
+    <div class="card stats" style="margin-bottom:14px">
+      <div class="stat"><span>Por cobrar</span><strong class="rojo" id="credPorCobrar">$ 0</strong></div>
+      <div class="stat"><span>Clientes que deben</span><strong id="credClientes">0</strong></div>
+    </div>
+    <button class="btn btn-primary" id="btnNuevoCredito" style="width:100%;margin-bottom:14px">Nuevo crédito</button>
+    <div class="chips" role="group" aria-label="Filtrar créditos">
+      <button class="chip" data-cfiltro="pendientes" aria-pressed="true">Deben</button>
+      <button class="chip" data-cfiltro="pagados" aria-pressed="false">Paz y salvo</button>
+      <button class="chip" data-cfiltro="todos" aria-pressed="false">Todos</button>
+    </div>
+    <div id="listaCreditos" class="lista-cred"></div>
+  </section>
  
   <!-- ===== VENDER ===== -->
   <section id="vista-vender">
-    <form id="formVenta" class="card stack">
+    <p class="empty" id="estadoVender">Cargando…</p>
+    <form id="formVenta" class="card stack" hidden>
       <label>Producto
         <select id="ventaProducto"></select>
       </label>
@@ -208,9 +291,13 @@
         </div>
       </label>
       <div class="total">
-        <div class="label">Total de la venta</div>
-        <div class="big" id="ventaTotal">$ 0</div>
-        <div class="gain" id="ventaGanancia">Ganancia $ 0</div>
+        <div class="label">Total de la venta · toca el monto para cambiarlo</div>
+        <div class="monto">
+          <span aria-hidden="true">$</span>
+          <input id="ventaTotal" type="text" inputmode="numeric" autocomplete="off" aria-label="Total de la venta">
+        </div>
+        <div class="unidad" id="ventaPrecioHint"></div>
+        <div class="unidad gain" id="ventaGanancia"></div>
       </div>
       <button class="btn btn-primary" id="btnVender" type="submit">Registrar venta</button>
     </form>
@@ -219,11 +306,18 @@
  
   <!-- ===== RESUMEN ===== -->
   <section id="vista-resumen" hidden>
-    <h2 style="margin-top:0">Hoy</h2>
+    <div class="chips" role="group" aria-label="Periodo">
+      <button class="chip" data-periodo="hoy" aria-pressed="true">Hoy</button>
+      <button class="chip" data-periodo="semana" aria-pressed="false">7 días</button>
+      <button class="chip" data-periodo="mes" aria-pressed="false">Este mes</button>
+      <button class="chip" data-periodo="todo" aria-pressed="false">Todo</button>
+    </div>
     <div class="card stats">
-      <div class="stat"><span>Vendido</span><strong id="hoyVendido">$ 0</strong></div>
-      <div class="stat"><span>Ganancia</span><strong class="good" id="hoyGanancia">$ 0</strong></div>
-      <div class="stat wide"><span>Ventas registradas</span><strong id="hoyCantidad">0</strong></div>
+      <div class="stat"><span>Vendido</span><strong id="perVendido">$ 0</strong></div>
+      <div class="stat"><span>Ganancia</span><strong class="good" id="perGanancia">$ 0</strong></div>
+      <div class="stat"><span>Ventas registradas</span><strong id="perCantidad">0</strong></div>
+      <div class="stat"><span>Unidades vendidas</span><strong id="perUnidades">0</strong></div>
+      <div class="stat wide"><span>Cobrado (contado + abonos recibidos)</span><strong class="good" id="perCobrado">$ 0</strong></div>
     </div>
  
     <h2>Acumulado</h2>
@@ -232,16 +326,25 @@
       <div class="stat"><span>Total vendido</span><strong id="totVendido">$ 0</strong></div>
       <div class="stat"><span>Ganancia total</span><strong class="good" id="totGanancia">$ 0</strong></div>
       <div class="stat"><span>Por vender, al costo</span><strong id="totStock">$ 0</strong></div>
+      <div class="stat"><span>Total cobrado</span><strong class="good" id="totCobrado">$ 0</strong></div>
+      <div class="stat"><span>Por cobrar (créditos)</span><strong class="rojo" id="totPorCobrar">$ 0</strong></div>
     </div>
+    <p class="hint" style="margin:8px 4px 0">Vendido y Ganancia cuentan la venta el día que se hace, sea de contado o a crédito. Cobrado es la plata que de verdad entró: ventas de contado más abonos.</p>
  
-    <h2>Últimas ventas</h2>
+    <h2>Ventas del periodo <span class="muted" style="font-weight:400">(las últimas 20)</span></h2>
     <div class="card" id="listaVentas"></div>
+
+    <button class="btn" id="btnExportar" style="margin-top:16px;width:100%">Descargar Excel (ventas y productos)</button>
   </section>
 </main>
  
 <nav class="tabs" aria-label="Secciones">
   <button data-vista="inventario">
     <svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4v10l-9 4-9-4V7z"/><path d="M3 7l9 4 9-4M12 11v10"/></svg>Inventario
+  </button>
+  <button data-vista="creditos">
+    <svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 10h19M6.5 15h4"/></svg>Créditos
+    <span class="punto" id="puntoCreditos" hidden>0</span>
   </button>
   <button data-vista="vender" aria-current="page">
     <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>Vender
@@ -257,7 +360,10 @@
     <div id="detFoto"></div>
     <div class="item-head">
       <div><h2 id="detNombre"></h2><small id="detMeta"></small></div>
-      <span id="detBadge"></span>
+      <div class="head-right">
+        <span id="detBadge"></span>
+        <button type="button" class="ojo" id="btnOjo" aria-label="Mostrar u ocultar precios"></button>
+      </div>
     </div>
     <div class="datos" id="detDatos"></div>
     <div class="acciones3">
@@ -286,9 +392,10 @@
     </div>
     <p class="hint" id="pHintCosto" hidden>Si cambias el costo, el total invertido se recalcula con el costo nuevo para todas las unidades.</p>
     <div class="row2">
-      <label id="pCantidadWrap">Unidades compradas <input id="pCantidad" type="number" inputmode="numeric" min="0" step="1"></label>
+      <label id="pCantidadWrap"><span id="pCantidadTitulo">Unidades compradas</span> <input id="pCantidad" type="number" inputmode="numeric" min="0" step="1" required></label>
       <label>ID <input id="pId" type="number" inputmode="numeric" min="1" step="1" required></label>
     </div>
+    <p class="hint" id="pHintCantidad" hidden></p>
     <label>Foto (opcional)
       <input id="pFoto" type="file" accept="image/*">
     </label>
@@ -306,9 +413,69 @@
     <h2>Reponer stock</h2>
     <p class="muted" id="reponerNombre" style="margin:0"></p>
     <label>Unidades que llegaron <input id="rCantidad" type="number" inputmode="numeric" min="1" step="1" required></label>
+    <label>Costo de esta compra, por unidad (opcional) <input id="rCosto" type="number" inputmode="decimal" min="0" step="any"></label>
+    <p class="hint" id="rHintCosto">Si lo dejas vacío, se mantiene el costo actual. Si lo llenas, el costo del producto pasa a ser el promedio de todo lo comprado.</p>
     <div class="dlg-actions">
       <button type="button" class="btn" data-cerrar>Cancelar</button>
       <button type="submit" class="btn btn-primary">Reponer</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Ventana: detalle del crédito -->
+<dialog id="dlgCredito">
+  <div class="detalle">
+    <div class="item-head">
+      <div><h2 id="crNombre"></h2><small id="crMeta"></small></div>
+      <span id="crBadge"></span>
+    </div>
+    <div class="datos" id="crDatos"></div>
+    <h3 class="sub-titulo">Productos</h3>
+    <div class="card" id="crProductos"></div>
+    <h3 class="sub-titulo">Abonos</h3>
+    <div class="card" id="crAbonos"></div>
+    <div class="acciones2">
+      <button class="btn btn-primary btn-small" id="btnAbonar" data-accion="abonar">Registrar abono</button>
+      <button class="btn btn-small btn-danger" data-accion="anular-credito">Anular crédito</button>
+    </div>
+    <button class="btn" data-cerrar>Cerrar</button>
+  </div>
+</dialog>
+
+<!-- Ventana: registrar abono -->
+<dialog id="dlgAbono">
+  <form id="formAbono">
+    <h2>Registrar abono</h2>
+    <p class="muted" id="abNombre" style="margin:0"></p>
+    <label>Monto del abono <input id="abMonto" type="number" inputmode="decimal" min="1" step="any" required></label>
+    <button type="button" class="btn btn-small" id="abTodo">Pagar todo lo que debe</button>
+    <p class="form-error" id="abError" hidden></p>
+    <div class="dlg-actions">
+      <button type="button" class="btn" data-cerrar>Cancelar</button>
+      <button type="submit" class="btn btn-primary" id="btnGuardarAbono">Abonar</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Ventana: nuevo crédito -->
+<dialog id="dlgNuevoCredito">
+  <form id="formNuevoCredito">
+    <h2>Nuevo crédito</h2>
+    <label>Nombre del cliente <input id="ncCliente" required autocomplete="off"></label>
+    <h3 class="sub-titulo">Productos que se lleva</h3>
+    <div class="stack" id="ncFilas"></div>
+    <button type="button" class="btn btn-small" id="ncAgregar">Agregar otro producto</button>
+    <div class="total">
+      <div class="label">Total del crédito</div>
+      <div class="monto"><span id="ncTotal" style="font-size:2rem;font-weight:750">$ 0</span></div>
+    </div>
+    <label>Abono inicial (opcional) <input id="ncAbono" type="number" inputmode="decimal" min="0" step="any"></label>
+    <p class="hint" id="ncDebe">Quedaría debiendo $ 0</p>
+    <label>Fecha del próximo pago (opcional) <input id="ncFecha" type="date"></label>
+    <p class="form-error" id="ncError" hidden></p>
+    <div class="dlg-actions">
+      <button type="button" class="btn" data-cerrar>Cancelar</button>
+      <button type="submit" class="btn btn-primary" id="btnGuardarCredito">Guardar crédito</button>
     </div>
   </form>
 </dialog>
@@ -322,22 +489,30 @@
   const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const hoy = () => new Date().toLocaleDateString("sv-SE"); // formato 2026-10-10
   const suma = (lista, campo) => lista.reduce((s, x) => s + (Number(x[campo]) || 0), 0);
+  const fechaCorta = (f) => (f ? f.split("-").reverse().join("/") : ""); // 2026-10-15 -> 15/10/2026
  
   const ICONO_CAJA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7l9-4 9 4v10l-9 4-9-4V7z"/><path d="M3 7l9 4 9-4M12 11v10"/></svg>';
  
   let productos = [];
   let ventas = [];
+  let creditos = [];
   let editandoId = null;
   let reponiendoId = null;
   let detalleId = null;
+  let creditoId = null;            // crédito que está abierto en su ventana
+  let filtroCreditos = "pendientes";
+  let precioUnit = 0; // precio por unidad de la venta en curso (empieza en el de lista)
+  const montoFmt = new Intl.NumberFormat("es-CO", { maximumFractionDigits: 0 });
  
-  /* Habla con el servidor Flask. Si el servidor responde con error, lanza ese mensaje. */
+  /* Habla con el servidor Flask. Si el servidor responde con error, lanza ese mensaje.
+     Si la sesión venció (401), te manda a la pantalla de clave. */
   async function api(ruta, metodo = "GET", cuerpo) {
     const resp = await fetch(ruta, {
       method: metodo,
       headers: { "Content-Type": "application/json" },
       body: cuerpo ? JSON.stringify(cuerpo) : undefined,
     });
+    if (resp.status === 401) { location.href = "/login"; throw new Error("Sesión vencida"); }
     let datos = {};
     try { datos = await resp.json(); } catch (e) { /* respuesta sin JSON */ }
     if (!resp.ok) throw new Error(datos.mensaje || "Algo salió mal. Intenta de nuevo.");
@@ -352,6 +527,13 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => { t.className = "toast"; }, 3200);
   }
+
+  /* Mensaje de error dentro de una ventana (el aviso de abajo queda tapado por las ventanas) */
+  function errorEn(selector, texto) {
+    const el = $(selector);
+    el.textContent = texto || "";
+    el.hidden = !texto;
+  }
  
   /* ====== Cargar datos del servidor ======
      Los totales del Resumen se calculan aquí con los productos y las ventas
@@ -361,17 +543,25 @@
       productos = await api("/productos");
     } catch (e) {
       aviso("No se pudo conectar con el servidor. Revisa que esté corriendo.", true);
+      $("#formVenta").hidden = true;
+      $("#vacioVender").hidden = true;
+      $("#estadoVender").hidden = false;
+      $("#estadoVender").innerHTML = 'No se pudieron cargar los datos.<br><br><button class="btn btn-small" id="btnReintentar">Reintentar</button>';
+      $("#btnReintentar").addEventListener("click", cargar);
       return;
     }
     try { ventas = await api("/ventas"); }
     catch (e) { ventas = []; aviso("No se pudieron cargar las ventas: " + e.message, true); }
+    try { creditos = await api("/creditos"); }
+    catch (e) { creditos = []; aviso("No se pudieron cargar los créditos: " + e.message, true); }
     pintarInventario();
     pintarVender();
+    pintarCreditos();
     pintarResumen();
   }
  
   /* ====== Pestañas ====== */
-  const titulos = { inventario: "Inventario", vender: "Registrar venta", resumen: "Resumen" };
+  const titulos = { inventario: "Inventario", creditos: "Créditos", vender: "Registrar venta", resumen: "Resumen" };
   function mostrar(vista) {
     for (const v of Object.keys(titulos)) $("#vista-" + v).hidden = v !== vista;
     document.querySelectorAll(".tabs button").forEach((b) => {
@@ -429,25 +619,46 @@
   });
  
   /* ---- Detalle del producto ---- */
+  let ocultarPrecios = true; // el ojito: true = precios con asteriscos
+  const OJO_ABIERTO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+  const OJO_TACHADO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18"/><path d="M10.6 6.1A10.7 10.7 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4.2M6.6 6.7C3.9 8.5 2 12 2 12s3.5 7 10 7c1.7 0 3.2-.4 4.5-1"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
+
+  function pintarDatosProducto() {
+    const p = productos.find((x) => x.id === detalleId);
+    if (!p) return;
+    const dinero = (n) => (ocultarPrecios ? "*****" : cop.format(n));
+    const datos = [
+      ["Costo", dinero(p.compra)],
+      ["Precio", dinero(p.venta)],
+      ["Ganancia por und.", dinero(p.ganancia_unitaria), true],
+      ["Comprado", p.cantidad_comprada],
+      ["Vendido", p.cantidad_vendida],
+      ["En stock", p.stock_actual],
+      ["Total invertido", dinero(p.total_invertido)],
+      ["Total vendido", dinero(p.total_vendido)],
+      ["Ganancia", dinero(p.ganancia), true],
+      ["Precio promedio vendido", p.precio_promedio === null ? "—" : dinero(p.precio_promedio)],
+      ["Por vender, al costo", dinero(p.compra * p.stock_actual), false, true],
+    ];
+    $("#detDatos").innerHTML = datos.map(([titulo, valor, destacado, ancho]) =>
+      `<div class="dato${ancho ? " ancho" : ""}"><span>${titulo}</span><strong${destacado ? ' class="good"' : ""}>${valor}</strong></div>`).join("");
+    $("#btnOjo").innerHTML = ocultarPrecios ? OJO_TACHADO : OJO_ABIERTO;
+    $("#btnOjo").setAttribute("aria-pressed", String(ocultarPrecios));
+  }
+
+  $("#btnOjo").addEventListener("click", () => {
+    ocultarPrecios = !ocultarPrecios;
+    pintarDatosProducto();
+  });
+
   function abrirDetalle(p) {
     detalleId = p.id;
+    ocultarPrecios = true; // cada vez que se abre un producto, empieza oculto
     $("#detFoto").innerHTML = fotoHtml(p, true);
     $("#detNombre").textContent = p.nombre;
     $("#detMeta").textContent = `${p.categoria}, ID ${p.id}`;
     $("#detBadge").innerHTML = insignia(p.stock_actual);
-    const datos = [
-      ["Costo", cop.format(p.compra)],
-      ["Precio", cop.format(p.venta)],
-      ["Ganancia por und.", cop.format(p.ganancia_unitaria), true],
-      ["Comprado", p.cantidad_comprada],
-      ["Vendido", p.cantidad_vendida],
-      ["En stock", p.stock_actual],
-      ["Total invertido", cop.format(p.total_invertido)],
-      ["Total vendido", cop.format(p.total_vendido)],
-      ["Ganancia", cop.format(p.ganancia), true],
-    ];
-    $("#detDatos").innerHTML = datos.map(([titulo, valor, destacado]) =>
-      `<div class="dato"><span>${titulo}</span><strong${destacado ? ' class="good"' : ""}>${valor}</strong></div>`).join("");
+    pintarDatosProducto();
     $("#dlgDetalle").showModal();
   }
  
@@ -490,6 +701,7 @@
     const formulario = new FormData();
     formulario.append("foto", blob, id + ".jpg");
     const resp = await fetch(`/productos/${id}/foto`, { method: "POST", body: formulario });
+    if (resp.status === 401) { location.href = "/login"; throw new Error("Sesión vencida"); }
     let datos = {};
     try { datos = await resp.json(); } catch (e) { /* respuesta sin JSON */ }
     if (!resp.ok) throw new Error(datos.mensaje || "No se pudo subir la foto");
@@ -503,13 +715,15 @@
     $("#pCategoria").value = p ? p.categoria : "";
     $("#pCompra").value = p ? p.compra : "";
     $("#pVenta").value = p ? p.venta : "";
-    $("#pCantidad").value = "";
-    $("#pCantidad").required = !p;
-    $("#pCantidadWrap").hidden = !!p;
+    $("#pCantidad").value = p ? p.cantidad_comprada : "";
+    $("#pCantidad").min = p ? p.cantidad_vendida : 0;
+    $("#pCantidadTitulo").textContent = p ? "Unidades compradas (en total)" : "Unidades compradas";
+    $("#pHintCantidad").hidden = !p;
+    if (p) $("#pHintCantidad").textContent = `Si te equivocaste al reponer, corrige aquí el total comprado. No puede ser menor a las ${p.cantidad_vendida} ya vendidas.`;
     $("#pHintCosto").hidden = !p;
     $("#pHintFoto").hidden = !(p && p.foto);
     $("#pFoto").value = "";
-    $("#pId").value = p ? p.id : Math.max(0, ...productos.map((x) => x.id)) + 1;
+    $("#pId").value = p ? p.id : Math.max(0, ...productos.map((x) => x.id), ...ventas.map((v) => v.id_producto || 0)) + 1;
     $("#pId").readOnly = !!p;
     $("#dlgProducto").showModal();
   }
@@ -536,7 +750,7 @@
           id_producto: id,
         });
       } else {
-        await api("/productos/" + id, "PUT", base);
+        await api("/productos/" + id, "PUT", { ...base, cantidad_comprada: Number($("#pCantidad").value) });
       }
     } catch (err) {
       aviso(err.message, true);
@@ -560,12 +774,16 @@
     reponiendoId = p.id;
     $("#reponerNombre").textContent = p.nombre + ", hoy hay " + p.stock_actual;
     $("#rCantidad").value = "";
+    $("#rCosto").value = "";
+    $("#rCosto").placeholder = "Actual: " + cop.format(p.compra);
     $("#dlgReponer").showModal();
   }
   $("#formReponer").addEventListener("submit", async (e) => {
     e.preventDefault();
     try {
-      await api(`/productos/${reponiendoId}/reponer`, "POST", { cantidad: Number($("#rCantidad").value) });
+      const cuerpo = { cantidad: Number($("#rCantidad").value) };
+      if ($("#rCosto").value !== "") cuerpo.costo = Number($("#rCosto").value);
+      await api(`/productos/${reponiendoId}/reponer`, "POST", cuerpo);
       aviso("Stock repuesto");
       $("#dlgReponer").close();
       cargar();
@@ -573,6 +791,247 @@
   });
  
   document.querySelectorAll("[data-cerrar]").forEach((b) => b.addEventListener("click", () => b.closest("dialog").close()));
+
+  /* ====== Créditos ====== */
+  function estadoCredito(c) {
+    if (c.esta_pagado) return '<span class="ok">Paz y salvo</span>';
+    let extra = "";
+    if (c.vencido) extra = '<br><span class="badge out">Vencido</span>';
+    else if (c.fecha_proximo_pago) extra = `<br><small class="muted">Paga el ${esc(fechaCorta(c.fecha_proximo_pago))}</small>`;
+    return `<strong class="deuda">Debe ${cop.format(c.saldo)}</strong>${extra}`;
+  }
+
+  /* Los que deben van primero, los vencidos arriba y el más antiguo antes */
+  function ordenarCreditos(lista) {
+    return [...lista].sort((a, b) => {
+      if (a.esta_pagado !== b.esta_pagado) return a.esta_pagado ? 1 : -1;
+      if (a.esta_pagado) return b.id_credito - a.id_credito;
+      if (a.vencido !== b.vencido) return a.vencido ? -1 : 1;
+      return a.id_credito - b.id_credito;
+    });
+  }
+
+  function pintarCreditos() {
+    const deben = creditos.filter((c) => !c.esta_pagado);
+    const clientes = new Set(deben.map((c) => c.cliente.trim().toLowerCase())).size;
+    $("#credPorCobrar").textContent = cop.format(suma(deben, "saldo"));
+    $("#credClientes").textContent = clientes;
+    const punto = $("#puntoCreditos");
+    punto.textContent = clientes;
+    punto.hidden = clientes === 0;
+
+    const cont = $("#listaCreditos");
+    if (creditos.length === 0) {
+      cont.innerHTML = '<p class="empty">Aún no hay créditos. Toca «Nuevo crédito» para registrar el primero.</p>';
+      return;
+    }
+    const lista = ordenarCreditos(creditos).filter((c) =>
+      filtroCreditos === "todos" || (filtroCreditos === "pendientes" ? !c.esta_pagado : c.esta_pagado));
+    if (lista.length === 0) {
+      cont.innerHTML = filtroCreditos === "pendientes"
+        ? '<p class="empty">Nadie te debe nada.</p>'
+        : '<p class="empty">No hay créditos en esta lista.</p>';
+      return;
+    }
+    cont.innerHTML = lista.map((c) => `
+      <button class="cred${c.esta_pagado ? " pagado" : ""}" data-credito="${c.id_credito}">
+        <div><strong>${esc(c.cliente)}</strong><br>
+          <small class="muted">${c.productos.length} producto${c.productos.length === 1 ? "" : "s"}, ${esc(fechaCorta(c.fecha))}</small></div>
+        <div class="estado">${estadoCredito(c)}</div>
+      </button>`).join("");
+  }
+
+  document.querySelectorAll(".chip[data-cfiltro]").forEach((c) => c.addEventListener("click", () => {
+    filtroCreditos = c.dataset.cfiltro;
+    document.querySelectorAll(".chip[data-cfiltro]").forEach((x) => x.setAttribute("aria-pressed", String(x === c)));
+    pintarCreditos();
+  }));
+
+  $("#listaCreditos").addEventListener("click", (e) => {
+    const tarjeta = e.target.closest("[data-credito]");
+    if (!tarjeta) return;
+    const c = creditos.find((x) => x.id_credito === Number(tarjeta.dataset.credito));
+    if (c) abrirCredito(c);
+  });
+
+  /* ---- Detalle del crédito ---- */
+  function abrirCredito(c) {
+    creditoId = c.id_credito;
+    $("#crNombre").textContent = c.cliente;
+    $("#crMeta").textContent = `Crédito #${c.id_credito}, ${fechaCorta(c.fecha)}`;
+    $("#crBadge").innerHTML = c.esta_pagado
+      ? '<span class="badge ok">Paz y salvo</span>'
+      : `<span class="badge out">Debe ${cop.format(c.saldo)}</span>`;
+    const proximo = c.fecha_proximo_pago
+      ? fechaCorta(c.fecha_proximo_pago) + (c.vencido ? " (vencido)" : "")
+      : "Sin fecha";
+    $("#crDatos").innerHTML = `
+      <div class="dato"><span>Total</span><strong>${cop.format(c.total)}</strong></div>
+      <div class="dato"><span>Abonado</span><strong class="good">${cop.format(c.total_abonado)}</strong></div>
+      <div class="dato"><span>Debe</span><strong class="${c.esta_pagado ? "verde" : "rojo"}">${cop.format(Math.max(0, c.saldo))}</strong></div>
+      <div class="dato ancho"><span>Próximo pago</span><strong class="${c.vencido ? "rojo" : ""}">${esc(proximo)}</strong></div>`;
+    $("#crProductos").innerHTML = c.productos.map((p) => `
+      <div class="sale">
+        <div><strong>${esc(p.producto)}</strong><br><small class="muted">${p.cantidad} und. x ${cop.format(p.precio_unitario)}</small></div>
+        <div><strong>${cop.format(p.total)}</strong></div>
+      </div>`).join("");
+    $("#crAbonos").innerHTML = c.abonos.length === 0
+      ? '<p class="empty" style="padding:8px">Aún no hay abonos.</p>'
+      : [...c.abonos].reverse().map((a) => `
+        <div class="sale">
+          <div>${esc(fechaCorta(a.fecha))}</div>
+          <div><strong class="good">${cop.format(a.monto)}</strong></div>
+        </div>`).join("");
+    $("#btnAbonar").hidden = c.esta_pagado;
+    $("#dlgCredito").showModal();
+  }
+
+  $("#dlgCredito").addEventListener("click", async (e) => {
+    if (e.target === e.currentTarget) { e.currentTarget.close(); return; }
+    const boton = e.target.closest("[data-accion]");
+    if (!boton) return;
+    const c = creditos.find((x) => x.id_credito === creditoId);
+    if (!c) return;
+    if (boton.dataset.accion === "abonar") { $("#dlgCredito").close(); abrirAbono(c); }
+    if (boton.dataset.accion === "anular-credito") {
+      const unidades = c.productos.reduce((s, p) => s + p.cantidad, 0);
+      const aviso2 = c.abonos.length > 0
+        ? ` Se borran también sus abonos (${cop.format(c.total_abonado)}); esa plata ya la recibiste, la app no la devuelve.`
+        : "";
+      if (!confirm(`¿Anular el crédito de ${c.cliente}? Las ${unidades} unidades vuelven al stock.${aviso2}`)) return;
+      try {
+        await api("/creditos/" + c.id_credito, "DELETE");
+        $("#dlgCredito").close();
+        aviso("Crédito anulado");
+        cargar();
+      } catch (err) { aviso(err.message, true); }
+    }
+  });
+
+  /* ---- Registrar abono ---- */
+  function abrirAbono(c) {
+    $("#abNombre").textContent = `${c.cliente}, debe ${cop.format(c.saldo)}`;
+    $("#abMonto").value = "";
+    $("#abMonto").max = c.saldo;
+    errorEn("#abError", "");
+    $("#dlgAbono").showModal();
+  }
+  $("#abTodo").addEventListener("click", () => {
+    const c = creditos.find((x) => x.id_credito === creditoId);
+    if (c) $("#abMonto").value = c.saldo;
+  });
+  $("#formAbono").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const id = creditoId;
+    const boton = $("#btnGuardarAbono");
+    boton.disabled = true;
+    errorEn("#abError", "");
+    try {
+      await api(`/creditos/${id}/abonos`, "POST", { monto: Number($("#abMonto").value) });
+    } catch (err) {
+      errorEn("#abError", err.message);
+      boton.disabled = false;
+      return;
+    }
+    boton.disabled = false;
+    $("#dlgAbono").close();
+    aviso("Abono registrado");
+    await cargar();
+    const c = creditos.find((x) => x.id_credito === id);
+    if (c) abrirCredito(c); // vuelve al detalle ya actualizado
+  });
+
+  /* ---- Nuevo crédito ---- */
+  function disponibles() { return productos.filter((p) => p.stock_actual > 0); }
+
+  function agregarFila() {
+    const fila = document.createElement("div");
+    fila.className = "fila-prod";
+    fila.innerHTML = `
+      <select class="fp-prod" aria-label="Producto">
+        ${disponibles().map((p) => `<option value="${p.id}">${esc(p.nombre)} (${p.stock_actual})</option>`).join("")}
+      </select>
+      <label class="mini"><span>Cantidad</span><input class="fp-cant" type="number" inputmode="numeric" min="1" step="1" value="1" required></label>
+      <label class="mini"><span>Precio por und.</span><input class="fp-precio" type="number" inputmode="decimal" min="0" step="any" required></label>
+      <button type="button" class="btn btn-small fp-quitar" aria-label="Quitar producto">✕</button>`;
+    $("#ncFilas").appendChild(fila);
+    ponerPrecioLista(fila);
+  }
+
+  function ponerPrecioLista(fila) {
+    const p = productos.find((x) => String(x.id) === fila.querySelector(".fp-prod").value);
+    fila.querySelector(".fp-precio").value = p ? p.venta : "";
+    actualizarTotalCredito();
+  }
+
+  function lineasCredito() {
+    return [...document.querySelectorAll("#ncFilas .fila-prod")].map((f) => ({
+      id_producto: Number(f.querySelector(".fp-prod").value),
+      cantidad: Number(f.querySelector(".fp-cant").value),
+      precio: Number(f.querySelector(".fp-precio").value),
+    }));
+  }
+
+  function actualizarTotalCredito() {
+    const total = lineasCredito().reduce((s, l) => s + (l.cantidad || 0) * (l.precio || 0), 0);
+    const abono = Number($("#ncAbono").value) || 0;
+    $("#ncTotal").textContent = cop.format(total);
+    $("#ncDebe").textContent = "Quedaría debiendo " + cop.format(Math.max(0, total - abono));
+  }
+
+  function abrirNuevoCredito() {
+    if (disponibles().length === 0) { aviso("No hay productos con stock para vender", true); return; }
+    $("#ncCliente").value = "";
+    $("#ncAbono").value = "";
+    $("#ncFecha").value = "";
+    $("#ncFecha").min = hoy();
+    $("#ncFilas").innerHTML = "";
+    errorEn("#ncError", "");
+    agregarFila();
+    $("#dlgNuevoCredito").showModal();
+  }
+  $("#btnNuevoCredito").addEventListener("click", abrirNuevoCredito);
+  $("#ncAgregar").addEventListener("click", agregarFila);
+  $("#ncAbono").addEventListener("input", actualizarTotalCredito);
+
+  $("#ncFilas").addEventListener("change", (e) => {
+    if (e.target.classList.contains("fp-prod")) ponerPrecioLista(e.target.closest(".fila-prod"));
+  });
+  $("#ncFilas").addEventListener("input", (e) => {
+    if (e.target.classList.contains("fp-cant") || e.target.classList.contains("fp-precio")) actualizarTotalCredito();
+  });
+  $("#ncFilas").addEventListener("click", (e) => {
+    if (!e.target.closest(".fp-quitar")) return;
+    if (document.querySelectorAll("#ncFilas .fila-prod").length > 1) {
+      e.target.closest(".fila-prod").remove();
+      actualizarTotalCredito();
+    }
+  });
+
+  $("#formNuevoCredito").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const boton = $("#btnGuardarCredito");
+    boton.disabled = true;
+    errorEn("#ncError", "");
+    try {
+      await api("/creditos", "POST", {
+        cliente: $("#ncCliente").value.trim(),
+        items: lineasCredito(),
+        abono: Number($("#ncAbono").value) || 0,
+        fecha_proximo_pago: $("#ncFecha").value || null,
+      });
+    } catch (err) {
+      errorEn("#ncError", err.message);
+      boton.disabled = false;
+      return;
+    }
+    boton.disabled = false;
+    $("#dlgNuevoCredito").close();
+    aviso("Crédito registrado");
+    filtroCreditos = "pendientes";
+    document.querySelectorAll(".chip[data-cfiltro]").forEach((x) => x.setAttribute("aria-pressed", String(x.dataset.cfiltro === "pendientes")));
+    cargar();
+  });
  
   /* ====== Vender ====== */
   function pintarVender() {
@@ -581,24 +1040,46 @@
     const disponibles = productos.filter((p) => p.stock_actual > 0);
     sel.innerHTML = disponibles.map((p) => `<option value="${p.id}">${esc(p.nombre)} (${p.stock_actual})</option>`).join("");
     if (disponibles.some((p) => String(p.id) === anterior)) sel.value = anterior;
+    $("#estadoVender").hidden = true;
     $("#formVenta").hidden = disponibles.length === 0;
     $("#vacioVender").hidden = disponibles.length > 0;
+    reiniciarPrecio();
+  }
+
+  /* El precio de la venta empieza en el precio de lista; se puede cambiar solo para esta venta */
+  function reiniciarPrecio() {
+    const p = productoElegido();
+    precioUnit = p ? p.venta : 0;
     actualizarTotal();
   }
  
   function productoElegido() { return productos.find((p) => String(p.id) === $("#ventaProducto").value); }
  
-  function actualizarTotal() {
+  function actualizarTotal(redibujar = true) {
     const p = productoElegido();
     const cant = Math.max(0, Number($("#ventaCantidad").value) || 0);
     if (!p) return;
-    $("#ventaTotal").textContent = cop.format(p.venta * cant);
-    $("#ventaGanancia").textContent = "Ganancia " + cop.format((p.venta - p.compra) * cant);
+    // redibujar = true: calcula el total con el precio por unidad; false: respeta lo que está escribiendo
+    if (redibujar) $("#ventaTotal").value = montoFmt.format(Math.round(precioUnit * cant));
+    const texto = $("#ventaTotal").value;
+    const total = Number(texto.replace(/\D/g, "")) || 0;
+    const ganTotal = texto === "" ? 0 : total - p.compra * cant;
+    $("#ventaGanancia").textContent = "Ganancia: " + cop.format(ganTotal);
     $("#ventaCantidad").max = p.stock_actual;
-    $("#btnVender").disabled = cant < 1 || cant > p.stock_actual;
+    const distinto = Math.abs(precioUnit - p.venta) > 0.005;
+    $("#ventaPrecioHint").textContent = "Precio por unidad: " + cop.format(precioUnit) + (distinto ? " (lista: " + cop.format(p.venta) + ")" : "");
+    $("#btnVender").disabled = cant < 1 || cant > p.stock_actual || texto === "";
   }
-  $("#ventaProducto").addEventListener("change", () => { $("#ventaCantidad").value = 1; actualizarTotal(); });
+  $("#ventaProducto").addEventListener("change", () => { $("#ventaCantidad").value = 1; reiniciarPrecio(); });
   $("#ventaCantidad").addEventListener("input", actualizarTotal);
+  /* Al escribir el total: se le ponen los puntos de miles y se calcula el precio por unidad */
+  $("#ventaTotal").addEventListener("input", () => {
+    const digitos = $("#ventaTotal").value.replace(/\D/g, "");
+    $("#ventaTotal").value = digitos === "" ? "" : montoFmt.format(Number(digitos));
+    const cant = Number($("#ventaCantidad").value) || 0;
+    if (digitos !== "" && cant >= 1) precioUnit = Number(digitos) / cant;
+    actualizarTotal(false);
+  });
   $("#menos").addEventListener("click", () => { const i = $("#ventaCantidad"); i.value = Math.max(1, Number(i.value) - 1); actualizarTotal(); });
   $("#mas").addEventListener("click", () => {
     const i = $("#ventaCantidad"); const p = productoElegido();
@@ -610,35 +1091,108 @@
     const p = productoElegido();
     if (!p) return;
     try {
-      await api("/ventas", "POST", { id_producto: p.id, cantidad: Number($("#ventaCantidad").value) });
+      await api("/ventas", "POST", {
+        id_producto: p.id,
+        cantidad: Number($("#ventaCantidad").value),
+        precio: precioUnit,
+      });
       aviso("Venta registrada");
       $("#ventaCantidad").value = 1;
-      cargar();
+      cargar(); // al recargar, el precio vuelve al de lista
     } catch (err) { aviso(err.message, true); }
   });
  
   /* ====== Resumen ====== */
+  let periodo = "hoy";
+  const diaTexto = (fecha) => fecha.toLocaleDateString("sv-SE"); // 2026-10-12
+
+  function enPeriodo(v) {
+    const hoyTexto = hoy();
+    if (periodo === "hoy") return v.fecha === hoyTexto;
+    if (periodo === "mes") return v.fecha.slice(0, 7) === hoyTexto.slice(0, 7);
+    if (periodo === "semana") {
+      const desde = new Date(); desde.setDate(desde.getDate() - 6);
+      return v.fecha >= diaTexto(desde) && v.fecha <= hoyTexto;
+    }
+    return true; // "todo"
+  }
+
+  document.querySelectorAll(".chip[data-periodo]").forEach((c) => c.addEventListener("click", () => {
+    periodo = c.dataset.periodo;
+    document.querySelectorAll(".chip[data-periodo]").forEach((x) => x.setAttribute("aria-pressed", String(x === c)));
+    pintarResumen();
+  }));
+
   function pintarResumen() {
-    const deHoy = ventas.filter((v) => v.fecha === hoy());
-    $("#hoyVendido").textContent = cop.format(suma(deHoy, "total"));
-    $("#hoyGanancia").textContent = cop.format(suma(deHoy, "ganancia"));
-    $("#hoyCantidad").textContent = deHoy.length;
- 
+    const delPeriodo = ventas.filter(enPeriodo);
+    $("#perVendido").textContent = cop.format(suma(delPeriodo, "total"));
+    $("#perGanancia").textContent = cop.format(suma(delPeriodo, "ganancia"));
+    $("#perCantidad").textContent = delPeriodo.length;
+    $("#perUnidades").textContent = suma(delPeriodo, "cantidad");
+
     $("#totInvertido").textContent = cop.format(suma(productos, "total_invertido"));
     $("#totVendido").textContent = cop.format(suma(ventas, "total"));
     $("#totGanancia").textContent = cop.format(suma(ventas, "ganancia"));
     $("#totStock").textContent = cop.format(productos.reduce((s, p) => s + p.compra * p.stock_actual, 0));
- 
-    const recientes = ventas.slice(-15).reverse();
+    $("#totPorCobrar").textContent = cop.format(suma(creditos.filter((c) => !c.esta_pagado), "saldo"));
+
+    /* Cobrado = ventas de contado + abonos recibidos (cada abono cuenta el día en que se recibió) */
+    const abonos = creditos.flatMap((c) => c.abonos);
+    const deContado = (lista) => lista.filter((v) => !v.id_credito);
+    $("#perCobrado").textContent = cop.format(suma(deContado(delPeriodo), "total") + suma(abonos.filter(enPeriodo), "monto"));
+    $("#totCobrado").textContent = cop.format(suma(deContado(ventas), "total") + suma(abonos, "monto"));
+
+    const recientes = delPeriodo.slice(-20).reverse();
     $("#listaVentas").innerHTML = recientes.length === 0
-      ? '<p class="empty">Todavía no hay ventas registradas.</p>'
+      ? '<p class="empty">No hay ventas en este periodo.</p>'
       : recientes.map((v) => `
         <div class="sale">
-          <div><strong>${esc(v.producto)}</strong><br><small class="muted">${esc(v.fecha)}, ${v.cantidad} und.</small></div>
+          <div><strong>${esc(v.producto)}</strong><br><small class="muted">${esc(v.fecha)}, ${v.cantidad} und.</small><br>
+            ${v.id_credito
+              ? '<small class="rojo">A crédito (se anula desde Créditos)</small>'
+              : `<button class="anular" data-anular="${v.id_venta}">Anular</button>`}</div>
           <div><strong>${cop.format(v.total)}</strong><br><small class="muted">Ganancia ${cop.format(v.ganancia)}</small></div>
         </div>`).join("");
   }
- 
+
+  /* Descargar el Excel (el servidor lo arma con todas las ventas y productos) */
+  $("#btnExportar").addEventListener("click", async () => {
+    const boton = $("#btnExportar");
+    boton.disabled = true;
+    try {
+      const resp = await fetch("/exportar");
+      if (resp.status === 401) { location.href = "/login"; throw new Error("Sesión vencida"); }
+      if (!resp.ok) {
+        let datos = {};
+        try { datos = await resp.json(); } catch (e) { /* sin JSON */ }
+        throw new Error(datos.mensaje || "No se pudo generar el Excel");
+      }
+      const archivo = URL.createObjectURL(await resp.blob());
+      const enlace = document.createElement("a");
+      enlace.href = archivo;
+      enlace.download = "SmallPhone_" + hoy() + ".xlsx";
+      document.body.appendChild(enlace);
+      enlace.click();
+      enlace.remove();
+      setTimeout(() => URL.revokeObjectURL(archivo), 10000);
+      aviso("Excel descargado");
+    } catch (err) { aviso(err.message, true); }
+    boton.disabled = false;
+  });
+
+  /* Anular una venta: la borra y devuelve las unidades al stock */
+  $("#listaVentas").addEventListener("click", async (e) => {
+    const boton = e.target.closest("[data-anular]");
+    if (!boton) return;
+    const v = ventas.find((x) => x.id_venta === Number(boton.dataset.anular));
+    if (!v) return;
+    const existe = productos.some((p) => p.id === v.id_producto);
+    const nota = existe ? "Las unidades vuelven al stock." : "El producto ya no existe, no hay stock que devolver.";
+    if (!confirm(`¿Anular la venta de ${v.producto} (${v.cantidad} und., ${cop.format(v.total)})? ${nota}`)) return;
+    try { await api("/ventas/" + v.id_venta, "DELETE"); aviso("Venta anulada"); cargar(); }
+    catch (err) { aviso(err.message, true); }
+  });
+
   mostrar("vender");
   cargar();
 </script>

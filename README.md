@@ -54,7 +54,7 @@ SMALL_app/
 └── iniciar.bat       # arranque rápido en Windows
 ```
 
-## Cómo ejecutarlo (Windows)
+## 使用 Cómo ejecutarlo (Windows)
 
 ```powershell
 git clone https://github.com/RodoCap/SMALL_app
